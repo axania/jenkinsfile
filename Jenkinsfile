@@ -30,7 +30,7 @@ pipeline {
       }
         stage('deploy'){
         steps {
-           deploy adapters: [tomcat8(credentialsId: 'tomcatID', path: '', url: 'http://3.91.200.67:8080/')], contextPath: 'jenkinsfile', war: '**/*.war'   
+           sshPublisher(publishers: [sshPublisherDesc(configName: 'docker-host', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'docker rmi -f jenkinsfile; docker build -t calvin2019/jenkinsfile .; docker tag jenkinsfile calvin2019/jenkinsfile; docker push calvin2019/jenkinsfile; docker run -d --name jenkinsfile-container -p 80:80 calvin2019/jenkinsfile', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '//home//dockeruser', remoteDirectorySDF: false, removePrefix: 'webapp/target', sourceFiles: '**/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
            
            
         }
